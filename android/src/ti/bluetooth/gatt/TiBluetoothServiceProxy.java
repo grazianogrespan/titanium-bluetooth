@@ -8,6 +8,7 @@ import org.appcelerator.kroll.annotations.Kroll;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ti.bluetooth.TiBluetoothModule;
 
@@ -28,7 +29,7 @@ public class TiBluetoothServiceProxy extends KrollProxy {
 
     for (BluetoothGattCharacteristic characteristic : characteristics) {
       characteristicList.add(
-          new TiBluetoothCharacteristicProxy(characteristic));
+          new TiBluetoothCharacteristicProxy(this, characteristic));
     }
 
     return characteristicList;
@@ -49,6 +50,31 @@ public class TiBluetoothServiceProxy extends KrollProxy {
       .getProperty
       @Kroll.method
       public String getUuid() {
-    return bluetoothGattService.getUuid().toString().toUpperCase();
+    return convertUuid(bluetoothGattService.getUuid());
+  }
+
+  private String convertUuid(UUID uuid) {
+    return uuid.toString().toUpperCase();
+  }
+
+  public TiBluetoothCharacteristicProxy
+  findCharacteristic(BluetoothGattCharacteristic gattCharacteristic) {
+    for (TiBluetoothCharacteristicProxy characteristicProxy : characteristics) {
+      if (characteristicProxy.equals(gattCharacteristic)) {
+        return characteristicProxy;
+      }
+    }
+
+    return null;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof BluetoothGattService) {
+      BluetoothGattService service = (BluetoothGattService)o;
+      return this.getUuid().equals(convertUuid(service.getUuid()));
+    } else {
+      return false;
+    }
   }
 }

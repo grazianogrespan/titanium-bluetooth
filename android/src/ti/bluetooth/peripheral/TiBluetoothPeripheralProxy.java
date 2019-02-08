@@ -15,9 +15,11 @@ import org.appcelerator.titanium.TiBlob;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ti.bluetooth.TiBluetoothModule;
 import ti.bluetooth.gatt.TiBluetoothCharacteristicProxy;
+import ti.bluetooth.gatt.TiBluetoothDescriptorProxy;
 import ti.bluetooth.gatt.TiBluetoothServiceProxy;
 import ti.bluetooth.listener.OnPeripheralConnectionStateChangedListener;
 
@@ -90,9 +92,16 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
           int status) {
         super.onCharacteristicWrite(gatt, characteristic, status);
 
+        TiBluetoothServiceProxy serviceProxy =
+            findService(characteristic.getService());
+        TiBluetoothCharacteristicProxy characteristicProxy =
+            serviceProxy != null
+                ? serviceProxy.findCharacteristic(characteristic)
+                : null;
+
         firePeripheralEvent(DID_WRITE_VALUE_FOR_CHARACTERISTIC,
-                            TiBluetoothPeripheralProxy.this, null,
-                            new TiBluetoothCharacteristicProxy(characteristic));
+                            TiBluetoothPeripheralProxy.this, serviceProxy,
+                            characteristicProxy);
       }
 
       @Override
@@ -101,9 +110,16 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
           final BluetoothGattCharacteristic characteristic) {
         super.onCharacteristicChanged(gatt, characteristic);
 
+        TiBluetoothServiceProxy serviceProxy =
+            findService(characteristic.getService());
+        TiBluetoothCharacteristicProxy characteristicProxy =
+            serviceProxy != null
+                ? serviceProxy.findCharacteristic(characteristic)
+                : null;
+
         firePeripheralEvent(DID_UPDATE_VALUE_FOR_CHARACTERISTIC,
-                            TiBluetoothPeripheralProxy.this, null,
-                            new TiBluetoothCharacteristicProxy(characteristic));
+                            TiBluetoothPeripheralProxy.this, serviceProxy,
+                            characteristicProxy);
       }
     });
   }
@@ -111,6 +127,17 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
   public void disconnectPeripheral() {
     bluetoothGatt.disconnect();
     bluetoothGatt.close();
+  }
+
+  private TiBluetoothServiceProxy
+  findService(BluetoothGattService gattService) {
+    for (TiBluetoothServiceProxy service : services) {
+      if (service.equals(gattService)) {
+        return service;
+      }
+    }
+
+    return null;
   }
 
   private List<TiBluetoothServiceProxy>
@@ -192,5 +219,19 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
     characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
     characteristic.setValue(value.getBytes());
     bluetoothGatt.writeCharacteristic(characteristic);
+  }
+
+  @Kroll.method
+  public void
+  writeValueForDescriptop(TiBlob value,
+                          TiBluetoothDescriptorProxy descriptorProxy) {
+    descriptorProxy.setValue(value);
+    bluetoothGatt.writeDescriptor(descriptorProxy.getDescriptor());
+  }
+
+  @Kroll.method
+  public TiBlob
+  readValueForDescriptor(TiBluetoothDescriptorProxy descriptorProxy) {
+    return descriptorProxy.getValue();
   }
 }
