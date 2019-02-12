@@ -37,16 +37,13 @@ public class TiBluetoothModule extends KrollModule {
   @Kroll.constant public static final int SCAN_MODE_OPPORTUNISTIC = -1;
 
   @Kroll.constant
-  public static final TiBlob DESCRIPTOR_DISABLE_NOTIFICATION_VALUE =
-      TiBlob.blobFromData(BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+  public static final int DESCRIPTOR_DISABLE_NOTIFICATION_VALUE = 1;
 
   @Kroll.constant
-  public static final TiBlob DESCRIPTOR_ENABLE_NOTIFICATION_VALUE =
-      TiBlob.blobFromData(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+  public static final int DESCRIPTOR_ENABLE_NOTIFICATION_VALUE = 2;
 
   @Kroll.constant
-  public static final TiBlob DESCRIPTOR_ENABLE_INDICATION_VALUE =
-      TiBlob.blobFromData(BluetoothGattDescriptor.ENABLE_INDICATION_VALUE);
+  public static final int DESCRIPTOR_ENABLE_INDICATION_VALUE = 3;
 
   @Kroll.constant
   public static final int CHARACTERISTIC_PROPERTY_WRITE_WITH_RESPONSE =

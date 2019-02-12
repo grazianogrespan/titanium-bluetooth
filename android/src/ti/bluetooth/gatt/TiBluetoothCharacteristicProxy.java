@@ -15,7 +15,8 @@ import java.util.UUID;
 import ti.bluetooth.TiBluetoothModule;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
-public class TiBluetoothCharacteristicProxy extends KrollProxy {
+public class TiBluetoothCharacteristicProxy
+    extends TiBluetoothGattIdentifiable {
   private BluetoothGattCharacteristic characteristic;
   private TiBluetoothServiceProxy serviceProxy;
   private List<TiBluetoothDescriptorProxy> descriptors;
@@ -46,11 +47,9 @@ public class TiBluetoothCharacteristicProxy extends KrollProxy {
     return serviceProxy;
   }
 
-  @Kroll
-      .getProperty
-      @Kroll.method
-      public String getUuid() {
-    return convertUuid(characteristic.getUuid());
+  @Override
+  protected UUID getUUID() {
+    return characteristic.getUuid();
   }
 
   @Kroll
@@ -69,10 +68,6 @@ public class TiBluetoothCharacteristicProxy extends KrollProxy {
 
   public BluetoothGattCharacteristic getCharacteristic() {
     return characteristic;
-  }
-
-  private String convertUuid(UUID uuid) {
-    return uuid.toString().toUpperCase();
   }
 
   @Override

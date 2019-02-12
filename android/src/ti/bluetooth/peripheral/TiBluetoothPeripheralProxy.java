@@ -223,7 +223,7 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
 
   @Kroll.method
   public void
-  writeValueForDescriptop(TiBlob value,
+  writeValueForDescriptop(int value,
                           TiBluetoothDescriptorProxy descriptorProxy) {
     descriptorProxy.setValue(value);
     bluetoothGatt.writeDescriptor(descriptorProxy.getDescriptor());
