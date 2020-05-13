@@ -9,7 +9,7 @@ The iOS API is provided with extra functionality to let your iOS-device act as a
 * PeripheralManager **(iOS only)**
 * Central **(iOS only)**
 * Characteristic
-* Descriptor **(iOS only)**
+* Descriptor
 * Peripheral
 * Service
 * Constants
@@ -98,12 +98,12 @@ restoreIdentifier(String)
 ### Properties
 * `value` (Ti.Blob)
 * `uuid` (String)
-* `service` (Service)  **(iOS only)**
+* `service` (Service) 
 * `properties` (CHARACTERISTIC_PROPERTY_*)  **(iOS only)**
 * `isNotifying` (Boolean)  **(iOS only)**
-* `descriptors` ([Descriptor])  **(iOS only)**
+* `descriptors` ([Descriptor]) 
 
-## `Descriptor` (iOS only)
+## `Descriptor`
 ### Properties
 * `characteristic` (Characteristic)
 * `value` (Mixed)
@@ -133,9 +133,9 @@ restoreIdentifier(String)
     * `characteristic` (Characteristic)
 * `discoverDescriptorsForCharacteristic` **(iOS only)**
     * `characteristic` (Characteristic)
-* `readValueForDescriptor(descriptor)` **(iOS only)**
+* `readValueForDescriptor(descriptor)`
     * `descriptor` (Descriptor)
-* `writeValueForDescriptor(value, descriptor)` **(iOS only)**
+* `writeValueForDescriptor(value, descriptor)`
     * `value` (Ti.Blob)
     * `descriptor` (Descriptor)
 

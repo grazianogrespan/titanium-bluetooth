@@ -10,12 +10,14 @@ package ti.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.titanium.TiBlob;
 
 import ti.bluetooth.central.TiBluetoothCentralManagerProxy;
 
@@ -37,6 +39,15 @@ public class TiBluetoothModule extends KrollModule {
   @Kroll.constant public static final int SCAN_MODE_LOW_POWER = 0;
 
   @Kroll.constant public static final int SCAN_MODE_OPPORTUNISTIC = -1;
+
+  @Kroll.constant
+  public static final int DESCRIPTOR_DISABLE_NOTIFICATION_VALUE = 1;
+
+  @Kroll.constant
+  public static final int DESCRIPTOR_ENABLE_NOTIFICATION_VALUE = 2;
+
+  @Kroll.constant
+  public static final int DESCRIPTOR_ENABLE_INDICATION_VALUE = 3;
 
   @Kroll.constant
   public static final int CHARACTERISTIC_PROPERTY_WRITE_WITH_RESPONSE =
