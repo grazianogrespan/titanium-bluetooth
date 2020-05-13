@@ -26,10 +26,6 @@ public class TiBluetoothModule extends KrollModule {
 
   @Kroll.constant public static final int MANAGER_STATE_POWERED_OFF = 10;
 
-  @Kroll.constant public static final int MANAGER_STATE_CONNECTED = 2;
-
-  @Kroll.constant public static final int MANAGER_STATE_DISCONNECTED = 0;
-
   @Kroll.constant public static final int MANAGER_STATE_POWERED_ON = 12;
 
   @Kroll.constant public static final int SCAN_MODE_BALANCED = 1;

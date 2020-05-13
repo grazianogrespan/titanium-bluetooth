@@ -53,7 +53,6 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
                                           int newState) {
         super.onConnectionStateChange(gatt, status, newState);
 
-        if (status == BluetoothGatt.GATT_SUCCESS) {
           if (newState == BluetoothProfile.STATE_CONNECTED) {
             bluetoothGatt = gatt;
             if (notifyOnConnection) {
@@ -68,11 +67,6 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
                       TiBluetoothPeripheralProxy.this);
             }
           }
-        } else {
-          onPeripheralConnectionStateChangedListener
-              .onPeripheralConnectionStateError(
-                  TiBluetoothPeripheralProxy.this);
-        }
       }
 
       @Override
@@ -223,7 +217,7 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
 
   @Kroll.method
   public void
-  writeValueForDescriptop(int value,
+  writeValueForDescriptor(int value,
                           TiBluetoothDescriptorProxy descriptorProxy) {
     descriptorProxy.setValue(value);
     bluetoothGatt.writeDescriptor(descriptorProxy.getDescriptor());

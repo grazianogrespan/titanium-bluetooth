@@ -1,6 +1,7 @@
 package ti.bluetooth.central;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
@@ -15,6 +16,7 @@ import org.appcelerator.kroll.annotations.Kroll;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ti.bluetooth.TiBluetoothModule;
 import ti.bluetooth.broadcastReceiver.TiBluetoohBroadcastReceiver;
@@ -51,7 +53,6 @@ public class TiBluetoothCentralManagerProxy
   private BluetoothAdapter bluetoothAdapter;
   private int scanMode;
   private int bluetoothState;
-
   private boolean isScanning;
 
   public TiBluetoothCentralManagerProxy(Context context,
@@ -64,8 +65,12 @@ public class TiBluetoothCentralManagerProxy
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 
+    intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+    intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+
     context.registerReceiver(new TiBluetoohBroadcastReceiver(this),
                              intentFilter);
+
   }
 
   @Kroll.method
@@ -235,12 +240,6 @@ public class TiBluetoothCentralManagerProxy
       break;
     case BluetoothAdapter.STATE_ON:
       bluetoothState = TiBluetoothModule.MANAGER_STATE_POWERED_ON;
-      break;
-    case BluetoothAdapter.STATE_CONNECTED:
-        bluetoothState = TiBluetoothModule.MANAGER_STATE_CONNECTED;
-        break;
-    case BluetoothAdapter.STATE_DISCONNECTED:
-      bluetoothState = TiBluetoothModule.MANAGER_STATE_DISCONNECTED;
       break;
     }
 
