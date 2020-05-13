@@ -7,11 +7,13 @@ import android.content.Intent;
 
 import ti.bluetooth.listener.OnBluetoothStateChangedListener;
 
-public final class TiBluetoohBroadcastReceiver extends BroadcastReceiver {
+public class TiBluetoohBroadcastReceiver extends BroadcastReceiver {
   private OnBluetoothStateChangedListener bluetoothStateChangedListener;
 
+  public TiBluetoohBroadcastReceiver() { super(); }
+
   public TiBluetoohBroadcastReceiver(
-      OnBluetoothStateChangedListener bluetoothStateChangedListener) {
+          OnBluetoothStateChangedListener bluetoothStateChangedListener) {
     super();
 
     this.bluetoothStateChangedListener = bluetoothStateChangedListener;

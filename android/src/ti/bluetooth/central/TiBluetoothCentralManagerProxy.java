@@ -78,6 +78,20 @@ public class TiBluetoothCentralManagerProxy
     startScanWithServices(null);
   }
 
+
+  @Kroll.method
+  public Object[] getBondedDevices() {
+    Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+    List<TiBluetoothPeripheralProxy> TiBluetoothPeripheralProxy = new ArrayList<>();
+
+    if (pairedDevices.size() > 0) {
+      for (BluetoothDevice device : pairedDevices) {
+        TiBluetoothPeripheralProxy.add(new TiBluetoothPeripheralProxy(device));
+      }
+    }
+    return TiBluetoothPeripheralProxy.toArray();
+  }
+
   @Kroll.method
   public void startScanWithServices(String[] services) {
     ScanSettings settings =
@@ -221,6 +235,12 @@ public class TiBluetoothCentralManagerProxy
       break;
     case BluetoothAdapter.STATE_ON:
       bluetoothState = TiBluetoothModule.MANAGER_STATE_POWERED_ON;
+      break;
+    case BluetoothAdapter.STATE_CONNECTED:
+        bluetoothState = TiBluetoothModule.MANAGER_STATE_CONNECTED;
+        break;
+    case BluetoothAdapter.STATE_DISCONNECTED:
+      bluetoothState = TiBluetoothModule.MANAGER_STATE_DISCONNECTED;
       break;
     }
 
