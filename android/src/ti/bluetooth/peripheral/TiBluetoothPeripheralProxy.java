@@ -25,6 +25,7 @@ import ti.bluetooth.listener.OnPeripheralConnectionStateChangedListener;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class TiBluetoothPeripheralProxy extends KrollProxy {
+  private static final String MTU_CHANGED = "MTUChanged";
   private static final String DID_DISCOVER_SERVICES = "didDiscoverServices";
   private static final String DID_DISCOVER_CHARACTERISTICS_FOR_SERVICE =
       "didDiscoverCharacteristicsForService";
@@ -55,6 +56,7 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
 
           if (newState == BluetoothProfile.STATE_CONNECTED) {
             bluetoothGatt = gatt;
+
             if (notifyOnConnection) {
               onPeripheralConnectionStateChangedListener
                   .onPeripheralConnectionStateConnected(
@@ -67,6 +69,17 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
                       TiBluetoothPeripheralProxy.this);
             }
           }
+      }
+
+      @Override
+      public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+        super.onMtuChanged(gatt, mtu, status);
+
+        KrollDict kd = new KrollDict();
+        kd.put("mtu", mtu);
+        kd.put("status", status);
+
+        fireEvent(MTU_CHANGED, kd);
       }
 
       @Override
@@ -156,6 +169,11 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
     kd.put("characteristic", characteristic);
 
     fireEvent(event, kd);
+  }
+
+  @Kroll.method
+  public boolean requestMTU(int value) {
+    return bluetoothGatt.requestMtu(value);
   }
 
   @Kroll.method

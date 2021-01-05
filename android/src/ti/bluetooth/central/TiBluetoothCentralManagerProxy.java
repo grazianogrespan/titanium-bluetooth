@@ -63,13 +63,14 @@ public class TiBluetoothCentralManagerProxy
     this.scanMode = ScanSettings.SCAN_MODE_BALANCED;
 
     IntentFilter intentFilter = new IntentFilter();
+    TiBluetoohBroadcastReceiver tiBluetoohBroadcastReceiver = new TiBluetoohBroadcastReceiver(this);
+
     intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
 
     intentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
     intentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
 
-    context.registerReceiver(new TiBluetoohBroadcastReceiver(this),
-                             intentFilter);
+    context.registerReceiver(tiBluetoohBroadcastReceiver,intentFilter);
 
   }
 
@@ -231,21 +232,19 @@ public class TiBluetoothCentralManagerProxy
 
   @Override
   public void onBluetoothStateChanged() {
+    KrollDict kd = new KrollDict();
+
     switch (bluetoothAdapter.getState()) {
-    case BluetoothAdapter.STATE_TURNING_OFF:
-      bluetoothState = TiBluetoothModule.MANAGER_STATE_POWERED_OFF;
-      break;
     case BluetoothAdapter.STATE_OFF:
       bluetoothState = TiBluetoothModule.MANAGER_STATE_POWERED_OFF;
+      kd.put("state", bluetoothState);
+      fireEvent(DID_UPDATE_STATE_EVENT, kd);
       break;
     case BluetoothAdapter.STATE_ON:
       bluetoothState = TiBluetoothModule.MANAGER_STATE_POWERED_ON;
+      kd.put("state", bluetoothState);
+      fireEvent(DID_UPDATE_STATE_EVENT, kd);
       break;
     }
-
-    KrollDict kd = new KrollDict();
-    kd.put("state", bluetoothState);
-
-    fireEvent(DID_UPDATE_STATE_EVENT, kd);
   }
 }
