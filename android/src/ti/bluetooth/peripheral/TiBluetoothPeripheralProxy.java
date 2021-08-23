@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
@@ -25,6 +26,7 @@ import ti.bluetooth.listener.OnPeripheralConnectionStateChangedListener;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class TiBluetoothPeripheralProxy extends KrollProxy {
+  private static final String DESCRIPTOR_WRITTEN = "DescriptorWritten";
   private static final String MTU_CHANGED = "MTUChanged";
   private static final String DID_DISCOVER_SERVICES = "didDiscoverServices";
   private static final String DID_DISCOVER_CHARACTERISTICS_FOR_SERVICE =
@@ -69,6 +71,16 @@ public class TiBluetoothPeripheralProxy extends KrollProxy {
                       TiBluetoothPeripheralProxy.this);
             }
           }
+      }
+
+      @Override
+      public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+          super.onDescriptorWrite(gatt, descriptor, status);
+
+          KrollDict kd = new KrollDict();
+          kd.put("status", status);
+
+          fireEvent(DESCRIPTOR_WRITTEN, kd);
       }
 
       @Override

@@ -11,6 +11,7 @@ import ti.bluetooth.TiBluetoothModule;
 
 @Kroll.proxy(parentModule = TiBluetoothModule.class)
 public class TiBluetoothDescriptorProxy extends TiBluetoothGattIdentifiable {
+
   private TiBluetoothCharacteristicProxy characteristicProxy;
   private BluetoothGattDescriptor descriptor;
 
